@@ -1,0 +1,1 @@
+My senior project for the GVSU Honors College. I will be exploring machine learning and data science with baseball statistics.
