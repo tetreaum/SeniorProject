@@ -23,13 +23,9 @@ with open("../data/core/People.csv") as csvDataFile1:
     for row1 in csvReader1:
         #id, birth year, month, day, first name, last name
         people.append([row1[0], row1[1], row1[2], row1[3], row1[13], row1[14]])
-        # if tempPerson1[0] == tempPerson[0]:
-        #     tempPerson.append([row1[1], row1[2], row1[3]])
 with open("../data/core/NewBatting.csv") as csvDataFile2:
     csvReader2 = csv.reader(csvDataFile2)
     for row in csvReader2:
-        # id, year, stint, team, g, ab, r, h, 2b, 3b, hr, rbi, sb, cs, bb, so, ibb,
-        # hbp, sh, sf, gidp
         avg = 0.0
         obp = 0.0
         slg = 0.0
@@ -41,21 +37,7 @@ with open("../data/core/NewBatting.csv") as csvDataFile2:
         if (float(row[6]) + float(row[15]) + float(row[17]) + float(row[18]) + float(row[20])) != 0.0:
             obp = (float(row[8]) + float(row[15]) + float(row[17]) + float(row[18])) / (float(row[6]) + float(row[15]) + float(row[17]) + float(row[18]) + float(row[20]))
         
-        batters.append([row[0], row[1], row[3], str(avg), str(obp), str(slg)])
-        # batters.append(row[1])
-        # batters.append(str(avg))
-        # batters.append(str(obp))
-        # batters.append(str(slg))
-
-        
-        
-        # batters.append([row[0], row[1], row[5], row[6], row[7], row[8], row[9], row[10], 
-        # row[11], row[12], row[13], row[14], row[15], row[16], row[17], row[18], row[19], row[20],
-        # row[21]])
-        # if tempPerson2[0] == tempPerson[3] and tempPerson2[1] == tempPerson[0]:
-        #     tempPerson.append([row2[5], row2[6], row2[7], row2[8], row2[9], row2[10], 
-        #     row2[11], row2[12], row2[13], row2[14], row2[15], row2[16], row2[17], row2[18], row2[19], row2[20],
-        #     row2[21]])
+        batters.append([row[0], row[1], row[3], str(avg), str(obp), str(slg), row[11], row[13]])
 
 with open("../data/core/Pitching.csv") as csvDataFile3:
     csvReader3 = csv.reader(csvDataFile3)
@@ -80,58 +62,41 @@ for player in salaries:
     
     for batter in batters: 
         if player[3] == batter[0] and player[0] == batter[1] and batter[2] == player[1]:
-            #del batter[0:1]
             if len(player) <= 6:
                 player.append(batter[3])
                 player.append(batter[4])
                 player.append(batter[5])
+                player.append(batter[6])
+                player.append(batter[7])
 
                 time = 2017 - int(player[0])
                 temp = math.pow(1.03, time)
-                adjustedSalary = int(player[4]) * temp #FIXME CHANGE BACK TO player5 when added age back
+                adjustedSalary = int(player[4]) * temp
                 player.append(adjustedSalary)
-
-                x = []
 
                 if adjustedSalary < 1000000:
                     player.append(1) # minimum
-                    #x.append([adjustedSalary, 1, batter[3], batter[4], batter[5]])
 
                 elif adjustedSalary < 5000000 and adjustedSalary >= 1000000:
                     player.append(2) # very low 
-                    #x.append([adjustedSalary, 2, batter[3], batter[4], batter[5]])
 
                 elif adjustedSalary < 10000000 and adjustedSalary >= 5000000:
                     player.append(3) # low
-                    #x.append([adjustedSalary, 3, batter[3], batter[4], batter[5]])
                 
                 elif adjustedSalary < 15000000 and adjustedSalary >= 10000000:
                     player.append(4) # average
-                    #x.append([adjustedSalary, 4, batter[3], batter[4], batter[5]])
 
                 elif adjustedSalary < 20000000 and adjustedSalary >= 15000000:
                     player.append(5) # high
-                    #x.append([adjustedSalary, 5, batter[3], batter[4], batter[5]])
 
                 elif adjustedSalary < 25000000 and adjustedSalary >= 20000000:
                     player.append(6) # very high
-                    #x.append([adjustedSalary, 6, batter[3], batter[4], batter[5]])
 
                 elif adjustedSalary < 300000000 and adjustedSalary >= 25000000:
                     player.append(7) # mvp
-                    #x.append([adjustedSalary, 7, batter[3], batter[4], batter[5]])
 
                 else:
                     player.append(-1) # no data
-                    #x.append([-1, 1])
-
-    # if loopCounter % 2 == 0:
-    #     trainingList.append(player)
-    #     #trainArr.append(x)
-    # else:
-    #     testList.append(player)
-    #     #testArr.append(x)
-    # 
 
     for person in people:
         if player[3] == person[0]:
@@ -148,10 +113,10 @@ for player in salaries:
 #             del pitcher[0:1]
 #             player.append(pitcher)
 
-trainingDF = pd.DataFrame(trainingList, columns=['Year', 'Team', 'League', 'Player ID', 'Salary', 'Average', 'On Base Percentage', 'Slugging Percentage', 'Adjusted Salary', 'Category', 'Age'])
+trainingDF = pd.DataFrame(trainingList, columns=['Year', 'Team', 'League', 'Player ID', 'Salary', 'Average', 'On Base Percentage', 'Slugging Percentage', 'Home Runs', 'Stolen Bases', 'Adjusted Salary', 'Category', 'Age'])
 # print(trainingDF)
 
-testDF = pd.DataFrame(testList, columns=['Year', 'Team', 'League', 'Player ID', 'Salary', 'Average', 'On Base Percentage', 'Slugging Percentage', 'Adjusted Salary', 'Category', 'Age'])
+# testDF = pd.DataFrame(testList, columns=['Year', 'Team', 'League', 'Player ID', 'Salary', 'Average', 'On Base Percentage', 'Slugging Percentage', 'Adjusted Salary', 'Category', 'Age'])
 # print(testDF)
 
 def clean_dataset(df):
@@ -162,6 +127,7 @@ def clean_dataset(df):
 
 #trainingDF = pd.get_dummies(trainingDF, columns=['Year', 'Team', 'League', 'Player ID'])
 
+# Fill in NaN values
 trainingDF.fillna(0, inplace=True)
 
 # trainingDF = clean_dataset(trainingDF)
@@ -171,13 +137,14 @@ trainingDF.fillna(0, inplace=True)
 
 # https://www.datacamp.com/community/tutorials/decision-tree-classification-python
 # https://scikit-learn.org/stable/modules/tree.html#classification
-features = ['Age', 'On Base Percentage', 'Slugging Percentage']
+features = ['Average']
 x = trainingDF[features]
 y = trainingDF.Category
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=1)
-clf = tree.DecisionTreeClassifier(max_depth=10)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, random_state=1)
+clf = tree.DecisionTreeClassifier()
 clf = clf.fit(x_train,y_train)
+tree.plot_tree(clf)
 y_pred = clf.predict(x_test)
 print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
 
